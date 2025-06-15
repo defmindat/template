@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\EatWise.Common.Application\EatWise.Common.Application.csproj" />
+      <ProjectReference Include="..\EatWise.Harvester.Domain\EatWise.Harvester.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+USER $APP_UID
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /src
+COPY ["EatWise.API/EatWise.API.csproj", "EatWise.API/"]
+COPY ["EatWise.Harvester.Application/EatWise.Harvester.Application.csproj", "EatWise.Harvester.Application/"]
+COPY ["EatWise.Harvester.Domain/EatWise.Harvester.Domain.csproj", "EatWise.Harvester.Domain/"]
+COPY ["EatWise.Common.Domain/EatWise.Common.Domain.csproj", "EatWise.Common.Domain/"]
+COPY ["EatWise.Harvester.Infrastructure/EatWise.Harvester.Infrastructure.csproj", "EatWise.Harvester.Infrastructure/"]
+COPY ["EatWise.Harvester.Presentation/EatWise.Harvester.Presentation.csproj", "EatWise.Harvester.Presentation/"]
+COPY ["EatWise.Common.Infrastructure/EatWise.Common.Infrastructure.csproj", "EatWise.Common.Infrastructure/"]
+COPY ["EatWise.Common.Application/EatWise.Common.Application.csproj", "EatWise.Common.Application/"]
+RUN dotnet restore "EatWise.API/EatWise.API.csproj"
+COPY . .
+WORKDIR "/src/EatWise.API"
+RUN dotnet build "EatWise.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "EatWise.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "EatWise.API.dll"]

@@ -1,0 +1,22 @@
+services:
+  eatwise.api:
+    image: ${DOCKER_REGISTRY-}eatwiseapi
+    container_name: EatWise.Api
+    build:
+      context: ../..
+      dockerfile: RiderProjects/EatWise/EatWise.API/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+  
+  eatwise.database:
+    image: postgres:latest
+    container_name: EatWise.Database
+    environment:
+      - POSTGRES_DB=eatwise
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
