@@ -23,7 +23,8 @@ builder.Configuration.AddModuleConfiguration(["harvesters"]);
 
 
 builder.Services.AddHealthChecks()
-    .AddNpgSql(databaseConnectionString);
+    .AddNpgSql(databaseConnectionString)
+    .AddUrlGroup(new Uri(builder.Configuration.GetValue<string>("KeyCloak:HealthUrl")!), HttpMethod.Get, "keycloak");
 
 builder.Services.AddHarvesterModule(builder.Configuration);
 
@@ -55,5 +56,8 @@ app.MapHealthChecks("health", new HealthCheckOptions
 app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
