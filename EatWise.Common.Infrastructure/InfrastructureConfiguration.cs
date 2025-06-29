@@ -1,6 +1,7 @@
 ﻿using EatWise.Common.Application.Data;
 using EatWise.Common.Infrastructure.Authentication;
 using EatWise.Common.Infrastructure.Data;
+using EatWise.Common.Infrastructure.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
@@ -19,6 +20,8 @@ public static class InfrastructureConfiguration
         services.TryAddSingleton(npgsqlDataSource);
         
         services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
+        
+        services.TryAddSingleton<PublishDomainEventsInterceptor>();
         
         return services;
     }

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\EatWise.Common.Infrastructure\EatWise.Common.Infrastructure.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Application\EatWise.Users.Application.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Presentation\EatWise.Users.Presentation.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Database\Migrations\" />
+    </ItemGroup>
+
+</Project>

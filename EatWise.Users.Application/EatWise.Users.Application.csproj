@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>       
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EatWise.Common.Application\EatWise.Common.Application.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Domain\EatWise.Users.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

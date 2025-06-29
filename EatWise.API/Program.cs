@@ -4,6 +4,7 @@ using EatWise.Common.Application;
 using EatWise.Common.Infrastructure;
 using EatWise.Common.Presentation.Endpoints;
 using EatWise.Harvester.Infrastructure;
+using EatWise.Users.Infrastructure;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
@@ -27,6 +28,7 @@ builder.Services.AddHealthChecks()
     .AddUrlGroup(new Uri(builder.Configuration.GetValue<string>("KeyCloak:HealthUrl")!), HttpMethod.Get, "keycloak");
 
 builder.Services.AddHarvesterModule(builder.Configuration);
+builder.Services.AddUsersModule(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

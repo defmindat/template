@@ -12,7 +12,7 @@ public abstract class Entity
     
     public void ClearDomainEvents() => _domainEvents.Clear();
 
-    protected void Raised(IDomainEvent domainEvent)
+    protected void Raise(IDomainEvent domainEvent)
     {
         _domainEvents.Add(domainEvent);
     }
