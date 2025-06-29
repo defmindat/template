@@ -5,7 +5,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..\..</DockerfileContext>
         <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
-        <UserSecretsId>b9dc5ead-03e2-4580-b29d-56466ed1d2e3</UserSecretsId>
+        <UserSecretsId>b9dc5ead-03e2-4580-b29d-56466ed1d2e3</UserSecretsId>        
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,10 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EatWise.Harvester.Application\EatWise.Harvester.Application.csproj" />
-      <ProjectReference Include="..\EatWise.Harvester.Domain\EatWise.Harvester.Domain.csproj" />
       <ProjectReference Include="..\EatWise.Harvester.Infrastructure\EatWise.Harvester.Infrastructure.csproj" />
-      <ProjectReference Include="..\EatWise.Harvester.Presentation\EatWise.Harvester.Presentation.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Infrastructure\EatWise.Users.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

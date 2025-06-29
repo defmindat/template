@@ -2,9 +2,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\EatWise.Common.Infrastructure\EatWise.Common.Infrastructure.csproj" />
-      <ProjectReference Include="..\EatWise.Common.Presentation\EatWise.Common.Presentation.csproj" />
       <ProjectReference Include="..\EatWise.Harvester.Application\EatWise.Harvester.Application.csproj" />
-      <ProjectReference Include="..\EatWise.Harvester.Domain\EatWise.Harvester.Domain.csproj" />
       <ProjectReference Include="..\EatWise.Harvester.Presentation\EatWise.Harvester.Presentation.csproj" />
     </ItemGroup>
 
