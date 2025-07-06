@@ -20,7 +20,7 @@ string databaseConnectionString = builder.Configuration.GetConnectionString("Dat
 
 builder.Services.AddInfrastructure(databaseConnectionString);
 
-builder.Configuration.AddModuleConfiguration(["harvesters"]);
+builder.Configuration.AddModuleConfiguration(["harvesters", "users"]);
 
 
 builder.Services.AddHealthChecks()
@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(t => t.FullName?.Replace("+", "."));
 });
 
-builder.Services.AddApplication([EatWise.Harvester.Application.AssemblyReference.Assembly]);
+builder.Services.AddApplication([EatWise.Harvester.Application.AssemblyReference.Assembly, EatWise.Users.Application.AssemblyReference.Assembly]);
 
 WebApplication app = builder.Build();
 

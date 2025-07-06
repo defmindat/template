@@ -20,3 +20,28 @@ services:
       - ./.containers/db:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  eatwise.identity:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: EatWise.Identity
+    command: start-dev --import-realm
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files:/opt/keycloak/data/import
+    ports:
+      - 18080:8080
+    
+  eatwise.seq:
+    image: datalust/seq:latest
+    container_name: Eatwise.Seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_NOAUTHENTICATION=True 
+    ports:
+      - 5341:5341
+      - 8081:80
+    
