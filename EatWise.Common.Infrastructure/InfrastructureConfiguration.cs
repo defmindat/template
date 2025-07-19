@@ -1,5 +1,6 @@
 ﻿using EatWise.Common.Application.Data;
 using EatWise.Common.Infrastructure.Authentication;
+using EatWise.Common.Infrastructure.Authorization;
 using EatWise.Common.Infrastructure.Data;
 using EatWise.Common.Infrastructure.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,8 @@ public static class InfrastructureConfiguration
         string databaseConnectionString)
     {
         services.AddAuthenticationInternal();
+
+        services.AddAuthorizationInternal();
         
         NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
         services.TryAddSingleton(npgsqlDataSource);

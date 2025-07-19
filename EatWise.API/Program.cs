@@ -16,12 +16,17 @@ builder.Host.UseSerilog((context, loggerConfig) => loggerConfig.ReadFrom.Configu
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(t => t.FullName?.Replace("+", "."));
+});
+
 string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
 
 builder.Services.AddInfrastructure(databaseConnectionString);
 
 builder.Configuration.AddModuleConfiguration(["harvesters", "users"]);
-
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
@@ -29,12 +34,6 @@ builder.Services.AddHealthChecks()
 
 builder.Services.AddHarvesterModule(builder.Configuration);
 builder.Services.AddUsersModule(builder.Configuration);
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(t => t.FullName?.Replace("+", "."));
-});
 
 builder.Services.AddApplication([EatWise.Harvester.Application.AssemblyReference.Assembly, EatWise.Users.Application.AssemblyReference.Assembly]);
 

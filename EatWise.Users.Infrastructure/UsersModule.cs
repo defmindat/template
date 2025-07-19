@@ -1,9 +1,11 @@
-﻿using EatWise.Common.Infrastructure;
+﻿using EatWise.Common.Application.Authorization;
+using EatWise.Common.Infrastructure;
 using EatWise.Common.Infrastructure.Interceptors;
 using EatWise.Common.Presentation.Endpoints;
 using EatWise.Users.Application.Abstractions.Data;
 using EatWise.Users.Application.Abstractions.Identity;
 using EatWise.Users.Domain.Users;
+using EatWise.Users.Infrastructure.Authorization;
 using EatWise.Users.Infrastructure.Database;
 using EatWise.Users.Infrastructure.Identity;
 using EatWise.Users.Infrastructure.Users;
@@ -26,6 +28,8 @@ public static class UsersModule
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IPermissionService, PermissionService>();
+        
         services.Configure<KeyCloakOptions>(configuration.GetSection("Users:KeyCloak"));
 
         services.AddTransient<KeyCloakDelegatingHandler>();
