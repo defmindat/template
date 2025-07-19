@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+      <ProjectReference Include="..\EatWise.Common.Infrastructure\EatWise.Common.Infrastructure.csproj" />
       <ProjectReference Include="..\EatWise.Common.Presentation\EatWise.Common.Presentation.csproj" />
       <ProjectReference Include="..\EatWise.Users.Application\EatWise.Users.Application.csproj" />
     </ItemGroup>

@@ -12,4 +12,8 @@
       <ProjectReference Include="..\EatWise.Common.Domain\EatWise.Common.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MassTransit.Abstractions" Version="8.5.1" />
+    </ItemGroup>
+
 </Project>
