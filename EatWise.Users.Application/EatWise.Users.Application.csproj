@@ -6,6 +6,7 @@
     <ItemGroup>
       <ProjectReference Include="..\EatWise.Common.Application\EatWise.Common.Application.csproj" />
       <ProjectReference Include="..\EatWise.Users.Domain\EatWise.Users.Domain.csproj" />
+      <ProjectReference Include="..\EatWise.Users.IntegrationEvents\EatWise.Users.IntegrationEvents.csproj" />
     </ItemGroup>
 
 </Project>

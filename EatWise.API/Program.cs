@@ -2,6 +2,7 @@ using EatWise.API.Extensions;
 using EatWise.API.Middleware;
 using EatWise.Common.Application;
 using EatWise.Common.Infrastructure;
+using EatWise.Common.Infrastructure.Configuration;
 using EatWise.Common.Presentation.Endpoints;
 using EatWise.Harvester.Infrastructure;
 using EatWise.Users.Infrastructure;
@@ -17,20 +18,19 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.CustomSchemaIds(t => t.FullName?.Replace("+", "."));
-});
+builder.Services.AddSwaggerDocumentation();
 
-string databaseConnectionString = builder.Configuration.GetConnectionString("Database")!;
+string databaseConnectionString = builder.Configuration.GetConnectionStringOrThrow("Database")!;
 
-builder.Services.AddInfrastructure(databaseConnectionString);
+builder.Services.AddInfrastructure([HarvesterModule.ConfigureConsumers], databaseConnectionString);
 
 builder.Configuration.AddModuleConfiguration(["harvesters", "users"]);
 
+Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
+
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
-    .AddUrlGroup(new Uri(builder.Configuration.GetValue<string>("KeyCloak:HealthUrl")!), HttpMethod.Get, "keycloak");
+    .AddKeyCloak(keyCloakHealthUrl);
 
 builder.Services.AddHarvesterModule(builder.Configuration);
 builder.Services.AddUsersModule(builder.Configuration);

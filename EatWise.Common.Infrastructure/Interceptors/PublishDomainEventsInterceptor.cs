@@ -29,7 +29,7 @@ public sealed class PublishDomainEventsInterceptor(IServiceScopeFactory serviceS
             .Select(entry => entry.Entity)
             .SelectMany(entity =>
             {
-                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents;
+                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents.ToArray();
                 
                 entity.ClearDomainEvents();
 

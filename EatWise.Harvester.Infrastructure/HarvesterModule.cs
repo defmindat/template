@@ -1,6 +1,10 @@
 ﻿using EatWise.Common.Presentation.Endpoints;
+using EatWise.Customers;
 using EatWise.Harvester.Application.Abstractions.Data;
+using EatWise.Harvester.Infrastructure.Customers;
 using EatWise.Harvester.Infrastructure.Database;
+using EatWise.Harvester.Presentation.Customers;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +21,11 @@ public static class HarvesterModule
         return services;
     }
 
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+        registrationConfigurator.AddConsumer<UserRegisteredIntegrationEventConsumer>();
+    }
+
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         string databaseConnectionString = configuration.GetConnectionString("Database")!;
@@ -30,6 +39,7 @@ public static class HarvesterModule
                 .UseSnakeCaseNamingConvention()
         );
 
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IUnitOfWork>(sp=> sp.GetRequiredService<HarvesterDbContext>());
     }
 }

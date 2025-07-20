@@ -61,6 +61,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{53CCE079-5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatWise.Harvester.ArchitectureTesting", "EatWise.Harvester.ArchitectureTesting\EatWise.Harvester.ArchitectureTesting.csproj", "{2BE46F17-9092-47E8-B6CD-2E6CF6AD0598}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatWise.Harvester.IntegrationEvents", "EatWise.Harvester.IntegrationEvents\EatWise.Harvester.IntegrationEvents.csproj", "{193CB2B6-006C-440A-B570-5652331D8DF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EatWise.Users.IntegrationEvents", "EatWise.Users.IntegrationEvents\EatWise.Users.IntegrationEvents.csproj", "{7661A6BA-C183-4DF9-8661-E2AB2E21A2AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +139,14 @@ Global
 		{2BE46F17-9092-47E8-B6CD-2E6CF6AD0598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BE46F17-9092-47E8-B6CD-2E6CF6AD0598}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BE46F17-9092-47E8-B6CD-2E6CF6AD0598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{193CB2B6-006C-440A-B570-5652331D8DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193CB2B6-006C-440A-B570-5652331D8DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193CB2B6-006C-440A-B570-5652331D8DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193CB2B6-006C-440A-B570-5652331D8DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7661A6BA-C183-4DF9-8661-E2AB2E21A2AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7661A6BA-C183-4DF9-8661-E2AB2E21A2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7661A6BA-C183-4DF9-8661-E2AB2E21A2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7661A6BA-C183-4DF9-8661-E2AB2E21A2AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -163,5 +175,7 @@ Global
 		{F2FD33B0-07B3-4190-999F-5A928346F13C} = {A1423E48-94C3-4A17-91F9-2CB838CE2ABC}
 		{53CCE079-55CD-41D1-BF43-6F149C5F610C} = {219D3118-F6FD-4931-95EB-BFD815F19DF5}
 		{2BE46F17-9092-47E8-B6CD-2E6CF6AD0598} = {53CCE079-55CD-41D1-BF43-6F149C5F610C}
+		{193CB2B6-006C-440A-B570-5652331D8DF4} = {219D3118-F6FD-4931-95EB-BFD815F19DF5}
+		{7661A6BA-C183-4DF9-8661-E2AB2E21A2AF} = {67C9D3D8-FEB5-4E85-9878-3A19AEED28EF}
 	EndGlobalSection
 EndGlobal
