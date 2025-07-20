@@ -6,4 +6,8 @@
       <ProjectReference Include="..\EatWise.Harvester.Presentation\EatWise.Harvester.Presentation.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Database\Migrations\" />
+    </ItemGroup>
+
 </Project>

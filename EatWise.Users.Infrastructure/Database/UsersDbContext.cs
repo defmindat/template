@@ -1,4 +1,5 @@
-﻿using EatWise.Users.Application.Abstractions.Data;
+﻿using EatWise.Common.Infrastructure.Outbox;
+using EatWise.Users.Application.Abstractions.Data;
 using EatWise.Users.Domain.Users;
 using EatWise.Users.Infrastructure.Users;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ public sealed class UsersDbContext(DbContextOptions<UsersDbContext> options) : D
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(Schemas.Users);
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
+        modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new PermissionConfiguration());

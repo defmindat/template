@@ -1,5 +1,9 @@
 ﻿{
   "Users": {
+    "Outbox": {
+      "IntervalInSeconds": 15,
+      "BatchSize": 20
+    },
     "KeyCloak": {
       "AdminUrl": "http://eatwise.identity:8080/admin/realms/eatwise/",
       "TokenUrl": "http://eatwise.identity:8080/realms/eatwise/protocol/openid-connect/token",

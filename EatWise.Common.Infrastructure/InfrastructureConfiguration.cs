@@ -1,13 +1,17 @@
-﻿using EatWise.Common.Application.Data;
+﻿using Dapper;
+using EatWise.Common.Application.Clock;
+using EatWise.Common.Application.Data;
 using EatWise.Common.Application.EventBus;
 using EatWise.Common.Infrastructure.Authentication;
 using EatWise.Common.Infrastructure.Authorization;
+using EatWise.Common.Infrastructure.Clock;
 using EatWise.Common.Infrastructure.Data;
-using EatWise.Common.Infrastructure.Interceptors;
+using EatWise.Common.Infrastructure.Outbox;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
+using Quartz;
 
 namespace EatWise.Common.Infrastructure;
 
@@ -22,6 +26,8 @@ public static class InfrastructureConfiguration
 
         services.AddAuthorizationInternal();
         
+        services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
+        
         services.TryAddSingleton<IEventBus, EventBus.EventBus>();
         
         NpgsqlDataSource npgsqlDataSource = new NpgsqlDataSourceBuilder(databaseConnectionString).Build();
@@ -29,7 +35,14 @@ public static class InfrastructureConfiguration
         
         services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
         
-        services.TryAddSingleton<PublishDomainEventsInterceptor>();
+        SqlMapper.AddTypeHandler(new GenericArrayHandler<string>());
+        
+        services.AddQuartz();
+
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+        
+        services.TryAddSingleton<InsertOutboxMessagesInterceptor>();
 
         services.AddMassTransit(configure =>
         {
