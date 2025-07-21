@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using Dapper;
 using EatWise.Common.Application.Authorization;
-using EatWise.Common.Application.Contracts;
+using EatWise.Common.Application.Messaging;
 using EatWise.Common.Application.Data;
 using EatWise.Common.Domain;
 using EatWise.Users.Domain.Users;

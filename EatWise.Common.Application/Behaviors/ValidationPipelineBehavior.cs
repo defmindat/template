@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using EatWise.Common.Application.Contracts;
+using EatWise.Common.Application.Messaging;
 using EatWise.Common.Domain;
 using FluentValidation;
 using FluentValidation.Results;

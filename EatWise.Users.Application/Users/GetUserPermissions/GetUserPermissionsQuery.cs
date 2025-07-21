@@ -1,5 +1,5 @@
 ﻿using EatWise.Common.Application.Authorization;
-using EatWise.Common.Application.Contracts;
+using EatWise.Common.Application.Messaging;
 
 namespace EatWise.Users.Application.Users.GetUserPermissions;
 

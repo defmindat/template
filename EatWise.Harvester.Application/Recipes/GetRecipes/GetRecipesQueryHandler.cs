@@ -1,12 +1,13 @@
 ﻿using System.Data.Common;
 using Dapper;
-using EatWise.Common.Application.Contracts;
 using EatWise.Common.Application.Data;
 using EatWise.Common.Domain;
+using EatWise.Common.Application.Messaging;
 
 namespace EatWise.Harvester.Application.Recipes.GetRecipes;
 
-internal sealed class GetRecipesQueryHandler(IDbConnectionFactory dbConnectionFactory): IQueryHandler<GetRecipesQuery, IReadOnlyCollection<RecipeResponse>>
+internal sealed class GetRecipesQueryHandler(IDbConnectionFactory dbConnectionFactory)
+    : IQueryHandler<GetRecipesQuery, IReadOnlyCollection<RecipeResponse>>
 {
     public async Task<Result<IReadOnlyCollection<RecipeResponse>>> Handle(GetRecipesQuery request, CancellationToken cancellationToken)
     {

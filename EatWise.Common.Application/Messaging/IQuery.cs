@@ -3,5 +3,5 @@ using MediatR;
 
 namespace EatWise.Common.Application.Messaging;
 
-public interface IQuery<TRepsonse> : IRequest<Result<TRepsonse>>;
+public interface IQuery<TResponse> : IRequest<Result<TResponse>>;
 

@@ -1,4 +1,4 @@
-﻿using EatWise.Common.Application.Contracts;
+﻿using EatWise.Common.Application.Messaging;
 using EatWise.Common.Domain;
 using EatWise.Users.Application.Abstractions.Data;
 using EatWise.Users.Domain.Users;

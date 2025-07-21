@@ -1,4 +1,4 @@
-﻿using EatWise.Common.Application.Contracts;
+﻿using EatWise.Common.Application.Messaging;
 
 namespace EatWise.Users.Application.Users.GetUser;
 
