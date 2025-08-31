@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Bogus" Version="35.6.3" />
+        <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="FluentAssertions" Version="8.6.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageReference Include="Testcontainers.Keycloak" Version="4.6.0" />
+        <PackageReference Include="Testcontainers.PostgreSql" Version="4.6.0" />
+        <PackageReference Include="Testcontainers.Redis" Version="4.6.0" />
+        <PackageReference Include="xunit" Version="2.9.2"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="evently-realm-export.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EatWise.API\EatWise.API.csproj" />
+      <ProjectReference Include="..\EatWise.Common.Application\EatWise.Common.Application.csproj" />
+      <ProjectReference Include="..\EatWise.Common.Domain\EatWise.Common.Domain.csproj" />
+      <ProjectReference Include="..\EatWise.Common.Infrastructure\EatWise.Common.Infrastructure.csproj" />
+      <ProjectReference Include="..\EatWise.Common.Presentation\EatWise.Common.Presentation.csproj" />
+      <ProjectReference Include="..\EatWise.Harvester.Application\EatWise.Harvester.Application.csproj" />
+      <ProjectReference Include="..\EatWise.Harvester.Domain\EatWise.Harvester.Domain.csproj" />
+      <ProjectReference Include="..\EatWise.Harvester.Infrastructure\EatWise.Harvester.Infrastructure.csproj" />
+      <ProjectReference Include="..\EatWise.Harvester.IntegrationEvents\EatWise.Harvester.IntegrationEvents.csproj" />
+      <ProjectReference Include="..\EatWise.Harvester.Presentation\EatWise.Harvester.Presentation.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Application\EatWise.Users.Application.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Domain\EatWise.Users.Domain.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Infrastructure\EatWise.Users.Infrastructure.csproj" />
+      <ProjectReference Include="..\EatWise.Users.IntegrationEvents\EatWise.Users.IntegrationEvents.csproj" />
+      <ProjectReference Include="..\EatWise.Users.Presentation\EatWise.Users.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EatWise.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ef05fa7b4bf924caced245af352fe18de22d751")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1fd2f93cd84e45f5eba3c38b90e39baba2be3018")]
 [assembly: System.Reflection.AssemblyProductAttribute("EatWise.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EatWise.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

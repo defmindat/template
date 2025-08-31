@@ -6,4 +6,8 @@
       <ProjectReference Include="..\EatWise.Users.Application\EatWise.Users.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="EatWise.Users.IntegrationTests" />
+    </ItemGroup>
+
 </Project>
