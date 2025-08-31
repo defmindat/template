@@ -1,0 +1,22 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  eatwise.api:
+    build:
+      context: "C:\\Users\\andre"
+      dockerfile: "RiderProjects/EatWise/EatWise.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/EatWise.API.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "eatwiseapi:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\andre\\AppData\\Roaming\\Microsoft\\UserSecrets:/home/app/.microsoft/usersecrets"
+    - "C:\\Users\\andre\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\Users\\andre\\RiderProjects\\EatWise\\EatWise.API:/app:rw"
+    - "C:\\Users\\andre\\RiderProjects\\EatWise:/src:rw"
+    working_dir: "/app"

@@ -8,7 +8,7 @@ namespace EatWise.Users.Application.Users.UpdateUser;
 internal sealed class UserProfileUpdatedDomainEventHandler(IEventBus eventBus)
     : DomainEventHandler<UserProfileUpdatedDomainEvent>
 {
-    public override async Task Handle(UserProfileUpdatedDomainEvent notification, CancellationToken cancellationToken)
+    public override async Task Handle(UserProfileUpdatedDomainEvent notification, CancellationToken cancellationToken = default)
     {
         await eventBus.PublishAsync(
             new UserProfileUpdatedIntegrationEvent(

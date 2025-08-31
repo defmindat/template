@@ -1,4 +1,5 @@
-﻿using EatWise.Common.Infrastructure.Outbox;
+﻿using EatWise.Common.Infrastructure.Inbox;
+using EatWise.Common.Infrastructure.Outbox;
 using EatWise.Customers;
 using EatWise.Harvester.Application.Abstractions.Data;
 using EatWise.Harvester.Infrastructure.Customers;
@@ -19,6 +20,8 @@ public sealed class HarvesterDbContext(DbContextOptions<HarvesterDbContext> opti
         
         modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         modelBuilder.ApplyConfiguration(new OutboxMessageConsumerConfiguration());
+        modelBuilder.ApplyConfiguration(new InboxMessageConfiguration());
+        modelBuilder.ApplyConfiguration(new InboxMessageConsumerConfiguration());
         modelBuilder.ApplyConfiguration(new RecipeConfiguration());
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
     }

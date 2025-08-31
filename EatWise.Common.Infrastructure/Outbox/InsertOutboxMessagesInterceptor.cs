@@ -17,19 +17,20 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
         {
             InsertOutboxMessages(eventData.Context);
         }
-        
+
         return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
     private static void InsertOutboxMessages(DbContext context)
     {
-        IEnumerable<OutboxMessage> outboxMessages = context
+        var outboxMessages = context
             .ChangeTracker
             .Entries<Entity>()
             .Select(entry => entry.Entity)
             .SelectMany(entity =>
             {
-                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents.ToArray();
+                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents;
+
                 entity.ClearDomainEvents();
 
                 return domainEvents;
@@ -40,8 +41,9 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
                 Type = domainEvent.GetType().Name,
                 Content = JsonConvert.SerializeObject(domainEvent, SerializerSettings.Instance),
                 OccurredOnUtc = domainEvent.OccurredOnUtc
-            });
-        
+            })
+            .ToList();
+
         context.Set<OutboxMessage>().AddRange(outboxMessages);
     }
 }

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 
 namespace EatWise.Users.Infrastructure.Identity;
-internal sealed class KeyCloakDelegatingHandler(IOptions<KeyCloakOptions> options): DelegatingHandler
+internal sealed class KeyCloakAuthDelegatingHandler(IOptions<KeyCloakOptions> options): DelegatingHandler
 {
     private readonly KeyCloakOptions _options = options.Value;
 

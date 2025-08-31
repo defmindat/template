@@ -1,4 +1,5 @@
 ﻿using EatWise.Common.Application.Authorization;
+using EatWise.Common.Application.EventBus;
 using EatWise.Common.Application.Messaging;
 using EatWise.Common.Infrastructure.Outbox;
 using EatWise.Common.Presentation.Endpoints;
@@ -8,6 +9,7 @@ using EatWise.Users.Domain.Users;
 using EatWise.Users.Infrastructure.Authorization;
 using EatWise.Users.Infrastructure.Database;
 using EatWise.Users.Infrastructure.Identity;
+using EatWise.Users.Infrastructure.Inbox;
 using EatWise.Users.Infrastructure.Outbox;
 using EatWise.Users.Infrastructure.Users;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,7 @@ public static class UsersModule
     public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDomainEventHandlers();
+        services.AddIntegrationEventHandlers();
         services.AddInfrastructure(configuration);
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
         return services;
@@ -35,7 +38,7 @@ public static class UsersModule
         
         services.Configure<KeyCloakOptions>(configuration.GetSection("Users:KeyCloak"));
 
-        services.AddTransient<KeyCloakDelegatingHandler>();
+        services.AddTransient<KeyCloakAuthDelegatingHandler>();
 
         services.AddHttpClient<KeyCloakClient>((serviceProvider, httpClient) =>
         {
@@ -43,7 +46,7 @@ public static class UsersModule
 
             httpClient.BaseAddress = new Uri(keyCloakOptions.AdminUrl);
         })
-        .AddHttpMessageHandler<KeyCloakDelegatingHandler>();
+        .AddHttpMessageHandler<KeyCloakAuthDelegatingHandler>();
 
         services.AddTransient<IIdentityProviderService, IdentityProviderService>();
 
@@ -63,6 +66,10 @@ public static class UsersModule
         services.Configure<OutboxOptions>(configuration.GetSection("Users:Outbox"));
 
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
+        
+        services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
+
+        services.ConfigureOptions<ConfigureProcessInboxJob>();
     }
 
     private static void AddDomainEventHandlers(this IServiceCollection services)
@@ -85,6 +92,29 @@ public static class UsersModule
             Type closedIdempotentHandler = typeof(IdempotentDomainEventHandler<>).MakeGenericType(domainEvent);
 
             services.Decorate(domainEventHandler, closedIdempotentHandler);
+        }
+    }
+
+    private static void AddIntegrationEventHandlers(this IServiceCollection services)
+    {
+        Type[] integrationEventHandlers = Presentation.AssemblyReference.Assembly
+            .GetTypes()
+            .Where(t => t.IsAssignableTo(typeof(IIntegrationEventHandler)))
+            .ToArray();
+
+        foreach (Type integrationEventHandler in integrationEventHandlers)
+        {
+            services.TryAddScoped(integrationEventHandler);
+
+            Type integrationEvent = integrationEventHandler
+                .GetInterfaces()
+                .Single(i => i.IsGenericType)
+                .GetGenericArguments()
+                .Single();
+            
+            Type closedIdempotentHandler = typeof(IdempotentIntegrationEventHandler<>).MakeGenericType(integrationEvent);
+            
+            services.Decorate(integrationEventHandler, closedIdempotentHandler);
         }
     }
 }
