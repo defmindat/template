@@ -14,7 +14,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 {
     private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
         .WithImage("postgres:latest")
-        .WithDatabase("evently")
+        .WithDatabase("eatwise")
         .WithUsername("postgres")
         .WithPassword("postgres")
         .Build();
@@ -37,7 +37,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         Environment.SetEnvironmentVariable("ConnectionStrings:Cache", _redisContainer.GetConnectionString());
 
         string keycloakAddress = _keycloakContainer.GetBaseAddress();
-        string keyCloakRealmUrl = $"{keycloakAddress}realms/evently";
+        string keyCloakRealmUrl = $"{keycloakAddress}realms/eatwise";
 
         Environment.SetEnvironmentVariable(
             "Authentication:MetadataAddress",
@@ -50,7 +50,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         {
             services.Configure<KeyCloakOptions>(o =>
             {
-                o.AdminUrl = $"{keycloakAddress}admin/realms/evently/";
+                o.AdminUrl = $"{keycloakAddress}admin/realms/eatwise/";
                 o.TokenUrl = $"{keyCloakRealmUrl}/protocol/openid-connect/token";
             });
         });

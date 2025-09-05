@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
 
-namespace EatWise.Users.Infrastructure.Outbox;
+namespace EatWise.Harvester.Infrastructure.Outbox;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxJob(
@@ -23,7 +23,7 @@ internal sealed class ProcessOutboxJob(
     IOptions<OutboxOptions> outboxOptions,
     ILogger<ProcessOutboxJob> logger) : IJob
 {
-    private const string ModuleName = "Users";
+    private const string ModuleName = "Harvesters";
 
     public async Task Execute(IJobExecutionContext context)
     {
@@ -31,27 +31,29 @@ internal sealed class ProcessOutboxJob(
 
         await using DbConnection connection = await dbConnectionFactory.OpenConnectionAsync();
         await using DbTransaction transaction = await connection.BeginTransactionAsync();
-        
+
         IReadOnlyList<OutboxMessageResponse> outboxMessages = await GetOutboxMessagesAsync(connection, transaction);
 
         foreach (OutboxMessageResponse outboxMessage in outboxMessages)
         {
             Exception? exception = null;
+
             try
             {
-                IDomainEvent domainEvent =
-                    JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, SerializerSettings.Instance)!;
+                IDomainEvent domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
+                    outboxMessage.Content,
+                    SerializerSettings.Instance)!;
 
                 using IServiceScope scope = serviceScopeFactory.CreateScope();
 
-                IEnumerable<IDomainEventHandler> domainEventHandlers = DomainEventHandlersFactory.GetHandlers(
+                IEnumerable<IDomainEventHandler> handlers = DomainEventHandlersFactory.GetHandlers(
                     domainEvent.GetType(),
                     scope.ServiceProvider,
                     Application.AssemblyReference.Assembly);
 
-                foreach (IDomainEventHandler domainEventHandler in domainEventHandlers)
+                foreach (IDomainEventHandler domainEventHandler in handlers)
                 {
-                    await domainEventHandler.Handle(domainEvent);
+                    await domainEventHandler.Handle(domainEvent, context.CancellationToken);
                 }
             }
             catch (Exception caughtException)
@@ -61,13 +63,15 @@ internal sealed class ProcessOutboxJob(
                     "{Module} - Exception while processing outbox message {MessageId}",
                     ModuleName,
                     outboxMessage.Id);
+
+                exception = caughtException;
             }
-            
+
             await UpdateOutboxMessageAsync(connection, transaction, outboxMessage, exception);
         }
-        
+
         await transaction.CommitAsync();
-        
+
         logger.LogInformation("{Module} - Completed processing outbox messages", ModuleName);
     }
 
@@ -77,10 +81,10 @@ internal sealed class ProcessOutboxJob(
     {
         string sql =
             $"""
-             SELECT 
+             SELECT
                 id AS {nameof(OutboxMessageResponse.Id)},
                 content AS {nameof(OutboxMessageResponse.Content)}
-             FROM users.outbox_messages
+             FROM harvesters.outbox_messages
              WHERE processed_on_utc IS NULL
              ORDER BY occurred_on_utc
              LIMIT {outboxOptions.Value.BatchSize}
@@ -95,19 +99,20 @@ internal sealed class ProcessOutboxJob(
     }
 
     private async Task UpdateOutboxMessageAsync(
-        IDbConnection dbConnection,
+        IDbConnection connection,
         IDbTransaction transaction,
         OutboxMessageResponse outboxMessage,
         Exception? exception)
     {
         const string sql =
             """
-            UPDATE users.outbox_messages
+            UPDATE harvesters.outbox_messages
             SET processed_on_utc = @ProcessedOnUtc,
                 error = @Error
             WHERE id = @Id
             """;
-       await dbConnection.ExecuteAsync(
+
+        await connection.ExecuteAsync(
             sql,
             new
             {
@@ -117,5 +122,6 @@ internal sealed class ProcessOutboxJob(
             },
             transaction: transaction);
     }
+
     internal sealed record OutboxMessageResponse(Guid Id, string Content);
 }

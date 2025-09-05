@@ -44,7 +44,7 @@ public class RegisterUserTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task RegisterUser_Should_PropagateToAttendanceModule()
+    public async Task RegisterUser_Should_PropagateToHarvestersModule()
     {
         // Register user
         var command = new RegisterUserCommand(

@@ -29,7 +29,7 @@ public sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
             .Select(entry => entry.Entity)
             .SelectMany(entity =>
             {
-                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents;
+                IReadOnlyCollection<IDomainEvent> domainEvents = entity.DomainEvents.ToList();
 
                 entity.ClearDomainEvents();
 
