@@ -1,8 +1,10 @@
 using EatWise.API.Extensions;
 using EatWise.API.Middleware;
+using EatWise.API.OpenTelemetry;
 using EatWise.Common.Application;
 using EatWise.Common.Infrastructure;
 using EatWise.Common.Infrastructure.Configuration;
+using EatWise.Common.Infrastructure.EventBus;
 using EatWise.Common.Presentation.Endpoints;
 using EatWise.Harvester.Infrastructure;
 using EatWise.Users.Infrastructure;
@@ -21,8 +23,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocumentation();
 
 string databaseConnectionString = builder.Configuration.GetConnectionStringOrThrow("Database")!;
+var rabbitMqSettings = new RabbitMqSettings(builder.Configuration.GetConnectionStringOrThrow("Queue"));
 
-builder.Services.AddInfrastructure([HarvesterModule.ConfigureConsumers], databaseConnectionString);
+builder.Services.AddInfrastructure(
+    DiagnosticsConfig.ServiceName,
+    [HarvesterModule.ConfigureConsumers],
+    rabbitMqSettings,
+    databaseConnectionString
+    );
 
 builder.Configuration.AddModuleConfiguration(["harvesters", "users"]);
 
@@ -30,6 +38,7 @@ Uri keyCloakHealthUrl = builder.Configuration.GetKeyCloakHealthUrl();
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
+    //.AddRabbitMQ(rabbitMqSettings.Host)
     .AddKeyCloak(keyCloakHealthUrl);
 
 builder.Services.AddHarvesterModule(builder.Configuration);
@@ -53,6 +62,8 @@ app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.UseLogContextTraceLogging();
 
 app.UseSerilogRequestLogging();
 

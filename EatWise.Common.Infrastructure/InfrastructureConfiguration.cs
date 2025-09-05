@@ -6,11 +6,14 @@ using EatWise.Common.Infrastructure.Authentication;
 using EatWise.Common.Infrastructure.Authorization;
 using EatWise.Common.Infrastructure.Clock;
 using EatWise.Common.Infrastructure.Data;
+using EatWise.Common.Infrastructure.EventBus;
 using EatWise.Common.Infrastructure.Outbox;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Quartz;
 
 namespace EatWise.Common.Infrastructure;
@@ -19,7 +22,9 @@ public static class InfrastructureConfiguration
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        Action<IRegistrationConfigurator>[] moduleConfigureConsumers,
+        string serviceName,
+        Action<IRegistrationConfigurator, string>[] moduleConfigureConsumers,
+        RabbitMqSettings rabbitMqSettings,
         string databaseConnectionString)
     {
         services.AddAuthenticationInternal();
@@ -51,18 +56,41 @@ public static class InfrastructureConfiguration
 
         services.AddMassTransit(configure =>
         {
-            foreach (Action<IRegistrationConfigurator> configureConsumers in moduleConfigureConsumers)
+            string instanceId = serviceName.ToLowerInvariant().Replace('.', '-');
+            foreach (Action<IRegistrationConfigurator, string> configureConsumers in moduleConfigureConsumers)
             {
-                configureConsumers(configure);
+                configureConsumers(configure, instanceId);
             }
             
             configure.SetKebabCaseEndpointNameFormatter();
 
-            configure.UsingInMemory((context, cfg) =>
+            configure.UsingRabbitMq((context, cfg) =>
             {
+                cfg.Host(new Uri(rabbitMqSettings.Host), h =>
+                {
+                    h.Username(rabbitMqSettings.Username);
+                    h.Password(rabbitMqSettings.Password);
+                });
+                
                 cfg.ConfigureEndpoints(context);
             });
         });
+
+        services
+            .AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService(serviceName))
+            .WithTracing(tracing =>
+            {
+                tracing
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation()
+                    .AddRedisInstrumentation()
+                    .AddNpgsql()
+                    .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName);
+
+                tracing.AddOtlpExporter();
+            });
         
         return services;
     }
