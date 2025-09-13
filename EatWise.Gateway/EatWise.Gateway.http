@@ -1,0 +1,6 @@
+@EatWise.Gateway_HostAddress = http://localhost:5137
+
+GET {{EatWise.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

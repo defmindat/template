@@ -4,8 +4,9 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "composeLaunchAction": "None",
-      "composeLaunchServiceName": "eatwise.api",
+      "composeLaunchServiceName": "eatwise.gateway",
       "serviceActions": {
+        "eatwise.gateway": "StartDebugging",
         "eatwise.api": "StartDebugging",
         "eatwise.database": "StartWithoutDebugging",
         "eatwise.identity": "StartWithoutDebugging"

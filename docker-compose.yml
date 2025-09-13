@@ -9,6 +9,16 @@ services:
       - 5000:8080
       - 5001:8081
   
+  eatwise.gateway:
+    image: ${DOCKER_REGISTRY-}eatwisegateway
+    container_name: EatWise.Gateway
+    build:
+      context: ../..
+      dockerfile: RiderProjects/EatWise/EatWise.Gateway/Dockerfile
+    ports:
+      - 3000:8080
+      - 3001:8081
+  
   eatwise.database:
     image: postgres:latest
     container_name: EatWise.Database
